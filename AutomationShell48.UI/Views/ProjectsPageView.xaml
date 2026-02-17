@@ -1,0 +1,31 @@
+<UserControl x:Class="AutomationShell48.UI.Views.ProjectsPageView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="Projects" Style="{StaticResource H1TextStyle}" />
+            <TextBlock Margin="0,6,0,18" Style="{StaticResource BodyTextStyle}" Text="Run a simulated task to preview per-view busy handling." />
+
+            <Border Style="{StaticResource CardSurfaceStyle}">
+                <StackPanel>
+                    <TextBlock Text="Automation Demo" Style="{StaticResource H3TextStyle}" />
+                    <TextBlock Margin="0,10,0,14"
+                               Style="{StaticResource BodyTextStyle}"
+                               Text="Click the action below. The page enters busy state for 2 seconds, then a success dialog is shown." />
+                    <Button Width="170"
+                            HorizontalAlignment="Left"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding SimulateWorkCommand}"
+                            Content="Simulate Work" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <Border Background="#66000000" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar IsIndeterminate="True" Width="240" Height="10" />
+                <TextBlock Margin="0,10,0,0" Text="{Binding BusyMessage}" Foreground="White" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
