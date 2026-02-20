@@ -8,6 +8,12 @@
     <Setting Name="IsSidebarCollapsed" Type="System.String" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="IsRightSidebarCollapsed" Type="System.String" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="IsRightMenuEnabled" Type="System.String" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
     <Setting Name="LastSelectedNavKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">main</Value>
     </Setting>

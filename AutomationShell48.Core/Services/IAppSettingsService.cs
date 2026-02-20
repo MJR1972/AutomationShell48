@@ -6,6 +6,8 @@ namespace AutomationShell48.Core.Services
     {
         ThemeKind LastTheme { get; set; }
         bool IsSidebarCollapsed { get; set; }
+        bool IsRightSidebarCollapsed { get; set; }
+        bool IsRightMenuEnabled { get; set; }
         string LastSelectedNavKey { get; set; }
         double WindowWidth { get; set; }
         double WindowHeight { get; set; }

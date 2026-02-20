@@ -30,6 +30,18 @@ namespace AutomationShell48.Infrastructure.Services
             set => _provider.Set(nameof(IsSidebarCollapsed), value.ToString(CultureInfo.InvariantCulture));
         }
 
+        public bool IsRightSidebarCollapsed
+        {
+            get => ParseBool(_provider.Get(nameof(IsRightSidebarCollapsed), "False"));
+            set => _provider.Set(nameof(IsRightSidebarCollapsed), value.ToString(CultureInfo.InvariantCulture));
+        }
+
+        public bool IsRightMenuEnabled
+        {
+            get => ParseBool(_provider.Get(nameof(IsRightMenuEnabled), "False"));
+            set => _provider.Set(nameof(IsRightMenuEnabled), value.ToString(CultureInfo.InvariantCulture));
+        }
+
         public string LastSelectedNavKey
         {
             get => _provider.Get(nameof(LastSelectedNavKey), "main");

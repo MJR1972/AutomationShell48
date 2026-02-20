@@ -29,6 +29,22 @@ namespace AutomationShell48.UI.Properties
         }
 
         [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public string IsRightSidebarCollapsed
+        {
+            get { return ((string)this["IsRightSidebarCollapsed"]); }
+            set { this["IsRightSidebarCollapsed"] = value; }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public string IsRightMenuEnabled
+        {
+            get { return ((string)this["IsRightMenuEnabled"]); }
+            set { this["IsRightMenuEnabled"] = value; }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("main")]
         public string LastSelectedNavKey
         {

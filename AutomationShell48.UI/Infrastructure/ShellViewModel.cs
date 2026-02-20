@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Threading;
+using AutomationShell48.Core.Dialogs;
 using AutomationShell48.Core.MVVM;
 using AutomationShell48.Core.Navigation;
 using AutomationShell48.Core.Services;
@@ -29,6 +31,9 @@ namespace AutomationShell48.UI.Infrastructure
         private string _statusText;
         private string _currentTime;
         private bool _isSidebarCollapsed;
+        private bool _isRightSidebarCollapsed;
+        private bool _isRightMenuEnabled;
+        private GridLength _rightSidebarWidth;
         private bool _isDialogOpen;
         private bool _isSettingsActive;
         private DialogViewModelBase _dialogViewModel;
@@ -53,18 +58,22 @@ namespace AutomationShell48.UI.Infrastructure
 
             NavigationGroups = new ObservableCollection<NavigationGroup>();
             BuildNavigation();
+            RightNavigationGroups = new ObservableCollection<NavigationGroup>();
+            BuildRightNavigation();
 
             ToggleSidebarCommand = new RelayCommand(ToggleSidebar);
+            ToggleRightSidebarCommand = new RelayCommand(ToggleRightSidebar);
             ToggleThemeCommand = new RelayCommand(ToggleTheme);
             OpenLogViewerCommand = new RelayCommand(OpenLogViewer);
             NavigateCommand = new RelayCommand<NavigationItem>(item => _navigationService.NavigateTo(item?.Key));
+            RightNavigateCommand = new RelayCommand<NavigationItem>(OnRightNavigate);
             CloseDialogCommand = new RelayCommand(() => _dialogService.CloseDialog(false), () => IsDialogOpen);
 
             _viewFactories = new Dictionary<string, Func<BaseViewModel>>(StringComparer.OrdinalIgnoreCase)
             {
                 ["main"] = () => new DashboardViewModel(_logger),
                 ["projects"] = () => new ProjectsViewModel(_dialogService, _logger),
-                ["settings"] = () => new SettingsPageViewModel(_themeService, _logger),
+                ["settings"] = () => new SettingsPageViewModel(_themeService, _logger, _settings, enabled => IsRightMenuEnabled = enabled),
                 ["about"] = () => new AboutViewModel()
             };
 
@@ -73,6 +82,9 @@ namespace AutomationShell48.UI.Infrastructure
             _dialogService.DialogClosed += OnDialogClosed;
 
             IsSidebarCollapsed = _settings.IsSidebarCollapsed;
+            IsRightSidebarCollapsed = _settings.IsRightSidebarCollapsed;
+            IsRightMenuEnabled = _settings.IsRightMenuEnabled;
+            UpdateRightSidebarWidth();
             UpdateThemeFields();
 
             var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
@@ -83,6 +95,7 @@ namespace AutomationShell48.UI.Infrastructure
         }
 
         public ObservableCollection<NavigationGroup> NavigationGroups { get; }
+        public ObservableCollection<NavigationGroup> RightNavigationGroups { get; }
 
         public BaseViewModel CurrentViewModel
         {
@@ -114,6 +127,26 @@ namespace AutomationShell48.UI.Infrastructure
             private set => SetProperty(ref _isSettingsActive, value);
         }
 
+        public bool IsRightMenuEnabled
+        {
+            get => _isRightMenuEnabled;
+            set
+            {
+                if (SetProperty(ref _isRightMenuEnabled, value))
+                {
+                    _settings.IsRightMenuEnabled = value;
+                    _settings.Save();
+                    UpdateRightSidebarWidth();
+                }
+            }
+        }
+
+        public GridLength RightSidebarWidth
+        {
+            get => _rightSidebarWidth;
+            private set => SetProperty(ref _rightSidebarWidth, value);
+        }
+
         public string StatusText
         {
             get => _statusText;
@@ -139,6 +172,20 @@ namespace AutomationShell48.UI.Infrastructure
             }
         }
 
+        public bool IsRightSidebarCollapsed
+        {
+            get => _isRightSidebarCollapsed;
+            set
+            {
+                if (SetProperty(ref _isRightSidebarCollapsed, value))
+                {
+                    _settings.IsRightSidebarCollapsed = value;
+                    _settings.Save();
+                    UpdateRightSidebarWidth();
+                }
+            }
+        }
+
         public string CurrentPageTitle
         {
             get => _currentPageTitle;
@@ -158,6 +205,8 @@ namespace AutomationShell48.UI.Infrastructure
         public RelayCommand OpenLogViewerCommand { get; }
 
         public RelayCommand<NavigationItem> NavigateCommand { get; }
+        public RelayCommand<NavigationItem> RightNavigateCommand { get; }
+        public RelayCommand ToggleRightSidebarCommand { get; }
 
         public RelayCommand CloseDialogCommand { get; }
 
@@ -194,6 +243,7 @@ namespace AutomationShell48.UI.Infrastructure
                     item.IsSelected = string.Equals(item.Key, key, StringComparison.OrdinalIgnoreCase);
                 }
             }
+            UpdateRightSelection(key);
 
             _settings.LastSelectedNavKey = key;
             _settings.Save();
@@ -217,6 +267,11 @@ namespace AutomationShell48.UI.Infrastructure
             IsSidebarCollapsed = !IsSidebarCollapsed;
         }
 
+        private void ToggleRightSidebar()
+        {
+            IsRightSidebarCollapsed = !IsRightSidebarCollapsed;
+        }
+
         private void ToggleTheme()
         {
             _themeService.ToggleTheme();
@@ -232,10 +287,86 @@ namespace AutomationShell48.UI.Infrastructure
             _toolWindowService.ShowTool(vm);
         }
 
+        private void BuildRightNavigation()
+        {
+            var tools = new NavigationGroup("Tools");
+            tools.Items.Add(new NavigationItem("logs", "Logs", "IconLogs"));
+            tools.Items.Add(new NavigationItem("diagnostics", "Diagnostics", "IconSettings"));
+
+            var shortcuts = new NavigationGroup("Shortcuts");
+            shortcuts.Items.Add(new NavigationItem("settings", "Settings", "IconSettings"));
+            shortcuts.Items.Add(new NavigationItem("about", "About", "IconInfo"));
+
+            var help = new NavigationGroup("Help");
+            help.Items.Add(new NavigationItem("docs", "Documentation", "IconInfo"));
+            help.Items.Add(new NavigationItem("support", "Support", "IconInfo"));
+
+            RightNavigationGroups.Add(tools);
+            RightNavigationGroups.Add(shortcuts);
+            RightNavigationGroups.Add(help);
+        }
+
+        private void OnRightNavigate(NavigationItem item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            switch (item.Key)
+            {
+                case "logs":
+                    OpenLogViewer();
+                    break;
+                case "settings":
+                case "about":
+                    _navigationService.NavigateTo(item.Key);
+                    break;
+                case "diagnostics":
+                    _ = _dialogService.ShowDialogAsync(new MessageDialogViewModel("Diagnostics", "Diagnostics panel is not yet implemented."));
+                    break;
+                case "docs":
+                    _ = _dialogService.ShowDialogAsync(new MessageDialogViewModel("Documentation", "Documentation shortcut is not yet configured."));
+                    break;
+                case "support":
+                    _ = _dialogService.ShowDialogAsync(new MessageDialogViewModel("Support", "Support shortcut is not yet configured."));
+                    break;
+                default:
+                    _ = _dialogService.ShowDialogAsync(new MessageDialogViewModel("Action", item.DisplayName + " is not yet implemented."));
+                    break;
+            }
+
+            UpdateRightSelection(item.Key);
+        }
+
+        private void UpdateRightSelection(string key)
+        {
+            foreach (var group in RightNavigationGroups)
+            {
+                foreach (var item in group.Items)
+                {
+                    item.IsSelected = string.Equals(item.Key, key, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+        }
+
         private void UpdateThemeFields()
         {
             OnPropertyChanged(nameof(CurrentThemeLabel));
             OnPropertyChanged(nameof(ThemeIconKey));
+        }
+
+        private void UpdateRightSidebarWidth()
+        {
+            if (!IsRightMenuEnabled)
+            {
+                RightSidebarWidth = new GridLength(0);
+                return;
+            }
+
+            RightSidebarWidth = IsRightSidebarCollapsed
+                ? new GridLength(72)
+                : new GridLength(250);
         }
     }
 }
