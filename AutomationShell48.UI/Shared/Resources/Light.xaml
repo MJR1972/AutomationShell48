@@ -20,6 +20,9 @@
     <Color x:Key="StatusSurfaceColor">#FFFDFEFF</Color>
     <Color x:Key="ShadowColor">#2A1D2A3B</Color>
     <Color x:Key="ValidationColor">#FFD92D20</Color>
+    <Color x:Key="CodeBlockBackgroundColor">#FFF8FAFD</Color>
+    <Color x:Key="CodeBlockBorderColor">#FFD5DEEA</Color>
+    <Color x:Key="SearchHighlightColor">#66FFE082</Color>
 
     <SolidColorBrush x:Key="WindowBackgroundBrush" Color="{StaticResource WindowBackgroundColor}" />
     <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
@@ -40,4 +43,7 @@
     <SolidColorBrush x:Key="DividerTitleBarBrush" Color="{StaticResource DividerTitleBarColor}" />
     <SolidColorBrush x:Key="ShadowBrush" Color="{StaticResource ShadowColor}" />
     <SolidColorBrush x:Key="ValidationBrush" Color="{StaticResource ValidationColor}" />
+    <SolidColorBrush x:Key="CodeBlockBackgroundBrush" Color="{StaticResource CodeBlockBackgroundColor}" />
+    <SolidColorBrush x:Key="CodeBlockBorderBrush" Color="{StaticResource CodeBlockBorderColor}" />
+    <SolidColorBrush x:Key="SearchHighlightBrush" Color="{StaticResource SearchHighlightColor}" />
 </ResourceDictionary>

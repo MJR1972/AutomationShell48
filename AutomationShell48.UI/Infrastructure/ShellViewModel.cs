@@ -10,8 +10,10 @@ using AutomationShell48.Core.Services;
 using AutomationShell48.Core.Theming;
 using AutomationShell48.UI.Features.About;
 using AutomationShell48.UI.Features.Dashboard;
+using AutomationShell48.UI.Features.HowTo;
 using AutomationShell48.UI.Features.Projects;
 using AutomationShell48.UI.Features.Settings;
+using AutomationShell48.UI.Features.Users;
 using AutomationShell48.UI.Tools.LogViewer;
 
 namespace AutomationShell48.UI.Infrastructure
@@ -73,6 +75,8 @@ namespace AutomationShell48.UI.Infrastructure
             {
                 ["main"] = () => new DashboardViewModel(_logger),
                 ["projects"] = () => new ProjectsViewModel(_dialogService, _logger),
+                ["users"] = () => new UsersPageViewModel(_logger),
+                ["howto"] = () => new HowToPageViewModel(_logger),
                 ["settings"] = () => new SettingsPageViewModel(_themeService, _logger, _settings, enabled => IsRightMenuEnabled = enabled),
                 ["about"] = () => new AboutViewModel()
             };
@@ -215,9 +219,11 @@ namespace AutomationShell48.UI.Infrastructure
             var general = new NavigationGroup("General");
             general.Items.Add(new NavigationItem("main", "Main", "IconHome"));
             general.Items.Add(new NavigationItem("projects", "Projects", "IconFolder"));
+            general.Items.Add(new NavigationItem("users", "Users", "IconUsers"));
 
             var system = new NavigationGroup("System");
             system.Items.Add(new NavigationItem("settings", "Settings", "IconSettings"));
+            system.Items.Add(new NavigationItem("howto", "How To", "IconHowTo"));
             system.Items.Add(new NavigationItem("about", "About", "IconInfo"));
 
             NavigationGroups.Add(general);

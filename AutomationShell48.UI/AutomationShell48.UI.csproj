@@ -92,6 +92,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Features\HowTo\HowToPageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Features\Users\UsersPageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Features\About\AboutPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -123,6 +131,11 @@
     <Compile Include="Features\Dashboard\DashboardViewModel.cs" />
     <Compile Include="Features\Projects\ProjectsViewModel.cs" />
     <Compile Include="Features\Settings\SettingsPageViewModel.cs" />
+    <Compile Include="Features\HowTo\Models\HowToDocument.cs" />
+    <Compile Include="Features\HowTo\Services\MarkdownParserService.cs" />
+    <Compile Include="Features\HowTo\HowToPageViewModel.cs" />
+    <Compile Include="Features\Users\Models\User.cs" />
+    <Compile Include="Features\Users\UsersPageViewModel.cs" />
     <Compile Include="Infrastructure\ShellViewModel.cs" />
     <Compile Include="Tools\LogViewer\LogViewerViewModel.cs" />
     <Compile Include="Features\Dashboard\DashboardView.xaml.cs">
@@ -133,6 +146,12 @@
     </Compile>
     <Compile Include="Features\Settings\SettingsPageView.xaml.cs">
       <DependentUpon>SettingsPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\HowTo\HowToPageView.xaml.cs">
+      <DependentUpon>HowToPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Features\Users\UsersPageView.xaml.cs">
+      <DependentUpon>UsersPageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Features\About\AboutPageView.xaml.cs">
       <DependentUpon>AboutPageView.xaml</DependentUpon>

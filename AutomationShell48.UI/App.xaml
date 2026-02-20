@@ -5,7 +5,9 @@
              xmlns:dashboard="clr-namespace:AutomationShell48.UI.Features.Dashboard"
              xmlns:projects="clr-namespace:AutomationShell48.UI.Features.Projects"
              xmlns:settings="clr-namespace:AutomationShell48.UI.Features.Settings"
+             xmlns:howTo="clr-namespace:AutomationShell48.UI.Features.HowTo"
              xmlns:about="clr-namespace:AutomationShell48.UI.Features.About"
+             xmlns:users="clr-namespace:AutomationShell48.UI.Features.Users"
              xmlns:coreDialogs="clr-namespace:AutomationShell48.Core.Dialogs;assembly=AutomationShell48.Core"
              xmlns:dialogViews="clr-namespace:AutomationShell48.UI.Dialogs">
     <Application.Resources>
@@ -30,8 +32,14 @@
             <DataTemplate DataType="{x:Type settings:SettingsPageViewModel}">
                 <settings:SettingsPageView />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type howTo:HowToPageViewModel}">
+                <howTo:HowToPageView />
+            </DataTemplate>
             <DataTemplate DataType="{x:Type about:AboutViewModel}">
                 <about:AboutPageView />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type users:UsersPageViewModel}">
+                <users:UsersPageView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type coreDialogs:MessageDialogViewModel}">
