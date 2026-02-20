@@ -1,7 +1,7 @@
 using System;
 using System.Windows;
 using AutomationShell48.Core.Services;
-using AutomationShell48.Core.ViewModels.Dialogs;
+using AutomationShell48.Core.Dialogs;
 
 namespace AutomationShell48.Infrastructure.Services
 {
@@ -45,3 +45,4 @@ namespace AutomationShell48.Infrastructure.Services
         }
     }
 }
+

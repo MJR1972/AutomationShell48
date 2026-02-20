@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
-using AutomationShell48.UI.ViewModels;
+using AutomationShell48.UI.Infrastructure;
 
 namespace AutomationShell48.UI
 {
@@ -232,3 +232,4 @@ namespace AutomationShell48.UI
         }
     }
 }
+

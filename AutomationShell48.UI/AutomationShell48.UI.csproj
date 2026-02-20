@@ -60,51 +60,51 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Light.xaml">
+    <Page Include="Shared\Resources\Light.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Themes\Dark.xaml">
+    <Page Include="Shared\Resources\Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\Controls.xaml">
+    <Page Include="Shared\Styles\Controls.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Styles\Typography.xaml">
+    <Page Include="Shared\Styles\Typography.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Icons\Icons.xaml">
+    <Page Include="Shared\Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\DashboardView.xaml">
+    <Page Include="Features\Dashboard\DashboardView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ProjectsPageView.xaml">
+    <Page Include="Features\Projects\ProjectsPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SettingsPageView.xaml">
+    <Page Include="Features\Settings\SettingsPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AboutPageView.xaml">
+    <Page Include="Features\About\AboutPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Dialogs\ConfirmDialogView.xaml">
+    <Page Include="Dialogs\ConfirmDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Dialogs\MessageDialogView.xaml">
+    <Page Include="Dialogs\MessageDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Tools\LogViewerWindow.xaml">
+    <Page Include="Tools\LogViewer\LogViewerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -114,36 +114,36 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\BoolToGridLengthConverter.cs" />
-    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\IconKeyToGeometryConverter.cs" />
-    <Compile Include="Services\UserSettingsProvider.cs" />
-    <Compile Include="Services\WpfThemeResourceManager.cs" />
-    <Compile Include="ViewModels\AboutViewModel.cs" />
-    <Compile Include="ViewModels\DashboardViewModel.cs" />
-    <Compile Include="ViewModels\ProjectsViewModel.cs" />
-    <Compile Include="ViewModels\SettingsPageViewModel.cs" />
-    <Compile Include="ViewModels\ShellViewModel.cs" />
-    <Compile Include="ViewModels\Tools\LogViewerViewModel.cs" />
-    <Compile Include="Views\DashboardView.xaml.cs">
+    <Compile Include="Shared\Converters\BoolToGridLengthConverter.cs" />
+    <Compile Include="Shared\Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Shared\Converters\IconKeyToGeometryConverter.cs" />
+    <Compile Include="Infrastructure\UserSettingsProvider.cs" />
+    <Compile Include="Infrastructure\WpfThemeResourceManager.cs" />
+    <Compile Include="Features\About\AboutViewModel.cs" />
+    <Compile Include="Features\Dashboard\DashboardViewModel.cs" />
+    <Compile Include="Features\Projects\ProjectsViewModel.cs" />
+    <Compile Include="Features\Settings\SettingsPageViewModel.cs" />
+    <Compile Include="Infrastructure\ShellViewModel.cs" />
+    <Compile Include="Tools\LogViewer\LogViewerViewModel.cs" />
+    <Compile Include="Features\Dashboard\DashboardView.xaml.cs">
       <DependentUpon>DashboardView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProjectsPageView.xaml.cs">
+    <Compile Include="Features\Projects\ProjectsPageView.xaml.cs">
       <DependentUpon>ProjectsPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SettingsPageView.xaml.cs">
+    <Compile Include="Features\Settings\SettingsPageView.xaml.cs">
       <DependentUpon>SettingsPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\AboutPageView.xaml.cs">
+    <Compile Include="Features\About\AboutPageView.xaml.cs">
       <DependentUpon>AboutPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\ConfirmDialogView.xaml.cs">
+    <Compile Include="Dialogs\ConfirmDialogView.xaml.cs">
       <DependentUpon>ConfirmDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Dialogs\MessageDialogView.xaml.cs">
+    <Compile Include="Dialogs\MessageDialogView.xaml.cs">
       <DependentUpon>MessageDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Tools\LogViewerWindow.xaml.cs">
+    <Compile Include="Tools\LogViewer\LogViewerWindow.xaml.cs">
       <DependentUpon>LogViewerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -180,3 +180,4 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WPF\Microsoft.WinFX.targets"
           Condition="!Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WPF\Microsoft.WinFX.targets') and !Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v18.0\WPF\Microsoft.WinFX.targets') and !Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v17.0\WPF\Microsoft.WinFX.targets') and !Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v16.0\WPF\Microsoft.WinFX.targets') and Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WPF\Microsoft.WinFX.targets')" />
 </Project>
+

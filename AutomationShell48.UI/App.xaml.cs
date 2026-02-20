@@ -3,10 +3,10 @@ using System.Windows;
 using System.Windows.Threading;
 using AutomationShell48.Core.Services;
 using AutomationShell48.Infrastructure.Services;
-using AutomationShell48.UI.Services;
-using AutomationShell48.UI.ViewModels;
-using AutomationShell48.UI.ViewModels.Tools;
-using AutomationShell48.UI.Views.Tools;
+using AutomationShell48.UI.Infrastructure;
+
+using AutomationShell48.UI.Tools.LogViewer;
+
 
 namespace AutomationShell48.UI
 {
@@ -103,3 +103,4 @@ namespace AutomationShell48.UI
         }
     }
 }
+

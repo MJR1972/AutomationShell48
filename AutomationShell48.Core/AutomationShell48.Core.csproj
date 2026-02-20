@@ -48,9 +48,10 @@
     <Compile Include="Services\IToolWindowService.cs" />
     <Compile Include="Services\IUserSettingsProvider.cs" />
     <Compile Include="Theming\ThemeKind.cs" />
-    <Compile Include="ViewModels\Dialogs\ConfirmDialogViewModel.cs" />
-    <Compile Include="ViewModels\Dialogs\MessageDialogViewModel.cs" />
+    <Compile Include="Dialogs\ConfirmDialogViewModel.cs" />
+    <Compile Include="Dialogs\MessageDialogViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
+
