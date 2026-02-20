@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using AutomationShell48.Core.MVVM;
 
 namespace AutomationShell48.UI.Features.HowTo.Services
 {
@@ -151,17 +152,24 @@ namespace AutomationShell48.UI.Features.HowTo.Services
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
             grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
-            var topBar = new DockPanel { Margin = new Thickness(0, 0, 0, 6) };
+            var topBar = new Grid { Margin = new Thickness(0, 0, 0, 6) };
+            topBar.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            topBar.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
             var copyButton = new Button
             {
                 Content = "Copy",
-                MinWidth = 64,
-                Height = 28,
-                Command = copyCodeCommand,
-                CommandParameter = code
+                MinWidth = 72,
+                Height = 34,
+                Command = new RelayCommand(() =>
+                {
+                    // Wrap shared command to avoid FlowDocument command-parameter edge cases.
+                    copyCodeCommand?.Execute(code);
+                }),
+                ToolTip = "Copy code block"
             };
-            copyButton.SetResourceReference(Control.StyleProperty, "SecondaryButtonStyle");
-            DockPanel.SetDock(copyButton, Dock.Right);
+            copyButton.SetResourceReference(Control.StyleProperty, "PrimaryButtonStyle");
+            Grid.SetColumn(copyButton, 1);
             topBar.Children.Add(copyButton);
 
             var codeBorder = new Border

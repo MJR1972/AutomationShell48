@@ -241,8 +241,17 @@ namespace AutomationShell48.UI.Features.HowTo
                 return;
             }
 
-            Clipboard.SetText(code);
-            _logger?.Info("HowTo code block copied to clipboard.");
+            try
+            {
+                Clipboard.SetText(code);
+                DocumentStatusText = "Code block copied to clipboard.";
+                _logger?.Info("HowTo code block copied to clipboard.");
+            }
+            catch (Exception ex)
+            {
+                DocumentStatusText = "Copy failed. Try again.";
+                _logger?.Error("Failed to copy HowTo code block.", ex);
+            }
         }
 
         /// <summary>

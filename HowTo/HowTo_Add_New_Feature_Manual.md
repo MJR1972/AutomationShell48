@@ -1,15 +1,7 @@
-# How To Add a New Feature View
-
-## This Guide Has Been Split
-Use one of these focused guides:
-
-1. Manual process:
-   - `HowTo_Add_New_Feature_Manual.md`
-2. Automated process with scaffold tool:
-   - `HowTo_Add_New_Feature_With_Tool.md`
+# How To Add a New Feature (Manual Process)
 
 ## Goal
-Create a new feature page and wire it into shell navigation.
+Create a new feature page and wire it into shell navigation manually.
 
 ## 1. Create Feature Files
 Create a folder under `AutomationShell48.UI/Features`:
@@ -68,7 +60,7 @@ xmlns:myFeature="clr-namespace:AutomationShell48.UI.Features.MyFeature"
 Edit `AutomationShell48.UI/Infrastructure/ShellViewModel.cs`:
 
 ```csharp
-["myfeature"] = () => new MyFeaturePageViewModel(),
+["myfeature"] = () => new MyFeaturePageViewModel(_logger),
 ```
 
 ## 6. Add Menu Item
@@ -80,15 +72,29 @@ general.Items.Add(new NavigationItem("myfeature", "My Feature", "IconInfo"));
 
 ## 7. Add Project Includes (Classic .csproj)
 Because this project is not SDK-style, update `AutomationShell48.UI.csproj`:
-- Add `<Page Include="Features\MyFeature\MyFeaturePageView.xaml" .../>`
-- Add `<Compile Include="Features\MyFeature\MyFeaturePageViewModel.cs" />`
-- Add `<Compile Include="Features\MyFeature\MyFeaturePageView.xaml.cs"> ... </Compile>`
+
+1. Add page:
+```xml
+<Page Include="Features\MyFeature\MyFeaturePageView.xaml">
+  <Generator>MSBuild:Compile</Generator>
+  <SubType>Designer</SubType>
+</Page>
+```
+
+2. Add ViewModel compile include:
+```xml
+<Compile Include="Features\MyFeature\MyFeaturePageViewModel.cs" />
+```
+
+3. Add code-behind compile include:
+```xml
+<Compile Include="Features\MyFeature\MyFeaturePageView.xaml.cs">
+  <DependentUpon>MyFeaturePageView.xaml</DependentUpon>
+</Compile>
+```
 
 ## 8. Verify
-1. Run app.
-2. Click new nav item.
-3. Confirm view loads in content area.
-
-## Recommended
-Prefer the tool-driven flow for speed and consistency:
-- `HowTo_Add_New_Feature_With_Tool.md`
+1. Build the solution.
+2. Run app.
+3. Click the new left-nav item.
+4. Confirm the view loads in the content area.
