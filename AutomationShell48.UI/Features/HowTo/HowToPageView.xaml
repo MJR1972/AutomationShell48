@@ -8,15 +8,13 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Page heading -->
         <StackPanel Grid.Row="0">
             <TextBlock Text="How To" Style="{StaticResource H1TextStyle}" />
             <TextBlock Margin="0,6,0,0"
                        Style="{StaticResource BodyTextStyle}"
-                       Text="In-app training guides for working inside the AutomationShell48 template." />
+                       Text="Browse, preview, and now create/update/delete How To markdown documents from inside the app." />
         </StackPanel>
 
-        <!-- Main split layout: left document list + right document viewer -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="300" />
@@ -24,7 +22,6 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- LEFT PANEL: search + filtered doc list -->
             <Border Grid.Column="0" Style="{StaticResource CardSurfaceStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -52,7 +49,6 @@
                 </Grid>
             </Border>
 
-            <!-- RIGHT PANEL: top action bar + rendered markdown -->
             <Border Grid.Column="2" Style="{StaticResource CardSurfaceStyle}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -61,21 +57,32 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <!-- TOP BAR -->
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding DocumentStatusText}" Style="{StaticResource CaptionTextStyle}" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding DocumentStatusText}"
+                                   Style="{StaticResource CaptionTextStyle}"
+                                   VerticalAlignment="Center" />
 
                         <StackPanel Grid.Column="1" Orientation="Horizontal">
                             <Button Style="{StaticResource SecondaryButtonStyle}"
-                                    MinWidth="126"
+                                    MinWidth="116"
                                     Height="34"
                                     Command="{Binding ToggleExpandCollapseCommand}"
                                     Content="{Binding ExpandCollapseButtonText}" />
+                            <Button Style="{StaticResource SecondaryButtonStyle}"
+                                    MinWidth="116"
+                                    Height="34"
+                                    Command="{Binding NewDraftCommand}"
+                                    Content="New How To" />
+                            <Button Style="{StaticResource SecondaryButtonStyle}"
+                                    MinWidth="116"
+                                    Height="34"
+                                    Command="{Binding LoadSelectedIntoEditorCommand}"
+                                    Content="Edit Selected" />
                             <Button Style="{StaticResource PrimaryButtonStyle}"
                                     MinWidth="126"
                                     Height="34"
@@ -84,17 +91,272 @@
                         </StackPanel>
                     </Grid>
 
-                    <!-- CENTER PANEL: FlowDocument viewer -->
-                    <FlowDocumentScrollViewer Grid.Row="2"
-                                              Document="{Binding RenderedDocument}"
-                                              VerticalScrollBarVisibility="Auto"
-                                              HorizontalScrollBarVisibility="Disabled"
-                                              IsToolBarVisible="False" />
+                    <TabControl Grid.Row="2"
+                                SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
+                        <TabItem Header="Preview">
+                            <FlowDocumentScrollViewer Margin="8"
+                                                      Document="{Binding RenderedDocument}"
+                                                      VerticalScrollBarVisibility="Auto"
+                                                      HorizontalScrollBarVisibility="Disabled"
+                                                      IsToolBarVisible="False" />
+                        </TabItem>
+
+                        <TabItem Header="Editor"
+                                 Visibility="{Binding IsEditorTabVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
+                            <Grid Margin="10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="12" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="12" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="8" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="8" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel Grid.ColumnSpan="2">
+                                        <TextBlock Text="{Binding EditorModeText}"
+                                                   Style="{StaticResource H3TextStyle}" />
+                                        <TextBlock Margin="0,4,0,0"
+                                                   Text="Use the section builder for structured inserts, or edit the markdown draft directly."
+                                                   Style="{StaticResource CaptionTextStyle}" />
+                                    </StackPanel>
+
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="0"
+                                               Text="Document Title"
+                                               Style="{StaticResource CaptionTextStyle}" />
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="1"
+                                               Text="File Name (.md optional)"
+                                               Style="{StaticResource CaptionTextStyle}" />
+
+                                    <TextBox Grid.Row="4"
+                                             Grid.Column="0"
+                                             Margin="0,0,8,0"
+                                             Style="{StaticResource ModernTextBoxStyle}"
+                                             Text="{Binding EditorDocumentTitle, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox Grid.Row="4"
+                                             Grid.Column="1"
+                                             Margin="8,0,0,0"
+                                             Style="{StaticResource ModernTextBoxStyle}"
+                                             Text="{Binding EditorFileName, UpdateSourceTrigger=PropertyChanged}" />
+                                </Grid>
+
+                                <Border Grid.Row="2"
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="10">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="12" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="120" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="120" />
+                                            <ColumnDefinition Width="140" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Grid.Row="0"
+                                                   Grid.ColumnSpan="4"
+                                                   Text="Section Builder"
+                                                   Style="{StaticResource H3TextStyle}" />
+
+                                        <TextBlock Grid.Row="2"
+                                                   Grid.Column="0"
+                                                   VerticalAlignment="Center"
+                                                   Text="Section Type"
+                                                   Style="{StaticResource CaptionTextStyle}" />
+                                        <ComboBox Grid.Row="2"
+                                                  Grid.Column="1"
+                                                  Margin="0,0,8,0"
+                                                  ItemsSource="{Binding SectionHeaderOptions}"
+                                                  DisplayMemberPath="Label"
+                                                  SelectedValuePath="Level"
+                                                  SelectedValue="{Binding SectionHeaderLevel}" />
+
+                                        <TextBlock Grid.Row="2"
+                                                   Grid.Column="2"
+                                                   VerticalAlignment="Center"
+                                                   Text="Insert At Line"
+                                                   Style="{StaticResource CaptionTextStyle}" />
+                                        <TextBlock Grid.Row="2"
+                                                   Grid.Column="3"
+                                                   VerticalAlignment="Center"
+                                                   Text="Code Language"
+                                                   Style="{StaticResource CaptionTextStyle}" />
+
+                                        <TextBox Grid.Row="4"
+                                                 Grid.Column="0"
+                                                 Grid.ColumnSpan="2"
+                                                 Margin="0,0,8,0"
+                                                 ToolTip="Section Header"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding SectionHeaderText, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBox Grid.Row="4"
+                                                  Grid.Column="2"
+                                                 Width="110"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="0,0,8,0"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding InsertAtLineNumberText, UpdateSourceTrigger=PropertyChanged}" />
+                                        <ComboBox Grid.Row="4"
+                                                  Grid.Column="3"
+                                                  MinWidth="140"
+                                                  IsEditable="True"
+                                                  ItemsSource="{Binding CodeLanguages}"
+                                                  Text="{Binding SectionCodeLanguage, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock Grid.Row="6"
+                                                   Grid.ColumnSpan="4"
+                                                   Margin="0,0,0,4"
+                                                   Text="Sub Text / Instructions"
+                                                   Style="{StaticResource CaptionTextStyle}" />
+                                        <TextBox Grid.Row="6"
+                                                 Grid.ColumnSpan="4"
+                                                 Margin="0,18,0,0"
+                                                 MinHeight="80"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding SectionBodyText, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <TextBlock Grid.Row="8"
+                                                   Grid.ColumnSpan="4"
+                                                   Text="Optional Code Block"
+                                                   Style="{StaticResource CaptionTextStyle}" />
+                                        <TextBox Grid.Row="8"
+                                                 Grid.ColumnSpan="4"
+                                                 Margin="0,18,0,46"
+                                                 MinHeight="100"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="Wrap"
+                                                 VerticalScrollBarVisibility="Auto"
+                                                 HorizontalScrollBarVisibility="Auto"
+                                                 FontFamily="Consolas"
+                                                 Style="{StaticResource ModernTextBoxStyle}"
+                                                 Text="{Binding SectionCodeText, UpdateSourceTrigger=PropertyChanged}" />
+
+                                        <WrapPanel Grid.Row="8"
+                                                   Grid.ColumnSpan="4"
+                                                   VerticalAlignment="Bottom">
+                                            <Button Width="140"
+                                                    Margin="0,0,8,0"
+                                                    Style="{StaticResource SecondaryButtonStyle}"
+                                                    Command="{Binding AddSectionToDraftCommand}"
+                                                    Content="Add Section" />
+                                            <Button Width="170"
+                                                    Style="{StaticResource SecondaryButtonStyle}"
+                                                    Command="{Binding InsertCodeBlockCommand}"
+                                                    Content="Insert Code Template" />
+                                        </WrapPanel>
+                                    </Grid>
+                                </Border>
+
+                                <Grid Grid.Row="4">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="8" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="12" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="Markdown Draft" Style="{StaticResource H3TextStyle}" />
+
+                                    <TextBox Grid.Row="2"
+                                             x:Name="MarkdownDraftTextBox"
+                                             AcceptsReturn="True"
+                                             TextWrapping="Wrap"
+                                             MinHeight="260"
+                                             Height="340"
+                                             VerticalScrollBarVisibility="Auto"
+                                             HorizontalScrollBarVisibility="Auto"
+                                             SelectionChanged="MarkdownDraftTextBox_SelectionChanged"
+                                             FontFamily="Consolas"
+                                             Style="{StaticResource ModernTextBoxStyle}"
+                                             Text="{Binding EditorMarkdown, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    <Border Grid.Row="4"
+                                            Padding="0,4,0,0"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="0,1,0,0">
+                                    <Grid Margin="0,8,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <WrapPanel Grid.Column="0">
+                                            <Button Width="110"
+                                                    Margin="0,0,8,8"
+                                                    Style="{StaticResource SecondaryButtonStyle}"
+                                                    Command="{Binding NewDraftCommand}"
+                                                    Content="New Draft" />
+                                            <Button Width="150"
+                                                    Margin="0,0,8,8"
+                                                    Style="{StaticResource SecondaryButtonStyle}"
+                                                    Command="{Binding LoadSelectedIntoEditorCommand}"
+                                                    Content="Load Selected" />
+                                            <Button Width="140"
+                                                    Margin="0,0,8,8"
+                                                    Style="{StaticResource SecondaryButtonStyle}"
+                                                    Command="{Binding CancelEditingCommand}"
+                                                    Content="Cancel Editing" />
+                                            <Button Width="130"
+                                                    Margin="0,0,8,8"
+                                                    Style="{StaticResource SecondaryButtonStyle}"
+                                                    Command="{Binding PreviewDraftCommand}"
+                                                    Content="Preview Draft" />
+                                        </WrapPanel>
+
+                                        <WrapPanel Grid.Column="1" Margin="12,0,0,0">
+                                            <Button Width="110"
+                                                    Margin="0,0,8,8"
+                                                    Style="{StaticResource PrimaryButtonStyle}"
+                                                    Command="{Binding SaveHowToCommand}"
+                                                    Content="Save" />
+                                            <Button Width="110"
+                                                    Margin="0,0,0,8"
+                                                    Style="{StaticResource DangerButtonStyle}"
+                                                    Command="{Binding DeleteHowToCommand}"
+                                                    Content="Delete" />
+                                        </WrapPanel>
+                                    </Grid>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                            </ScrollViewer>
+                        </TabItem>
+                    </TabControl>
                 </Grid>
             </Border>
         </Grid>
 
-        <!-- Overlay for shared busy pattern -->
         <Border Background="#66000000" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ProgressBar IsIndeterminate="True" Width="240" Height="10" />
